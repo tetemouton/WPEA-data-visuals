@@ -104,47 +104,17 @@ ui <- fluidPage(
                                          choices = list("Gears" = 1, "Fleets" = 2, "Species" = 3),
                                          selected = 1, inline = TRUE),
                             
-                            
-                            # conditionalPanel(condition = "input.all_switch == '2'",
-                            #                  selectInput("zngroup", h5(tags$b("Group zones by:")),
-                            #                              c("FFA vs others" = "FFAoth1",
-                            #                                "High seas vs others" = "HSreg1",
-                            #                                "Subregional groups" = "SUBreg1",
-                            #                                "Individual flags" = "INDflgs1"), width = "250px")),
-
-
-                                            # selectInput("flggroup", h5(tags$b("Group flags by:")),
-                                            #             c("FFA vs others" = "FFAoth",
-                                            #               "Subregional groups" = "SUBreg",
-                                            #               "Individual flags" = "INDflgs"), width = "250px"),
-                                            # 
-                                            # 
-                                            # 
-                                            # radioButtons("overlap_switch", label = h5(tags$b("Include overlap area: (note - this doesn't work yet)")),
-                                            #              choices = list("Include overlap" = 1, "Exclude overlap" = 2),
-                                            #              selected = 1, inline = TRUE),
 
                                             sliderInput("sliderrng", label = h5(tags$b("Choose years to display")),  min = fstyr, max = lstyr, value = c(2000, lstyr), width="250px", ticks=TRUE, sep="")
                ),
                mainPanel(
                  fluidRow(column(8, plotOutput("Catmap")), column(4, plotOutput("Lenplots"))),
-                 #fluidRow(column(9, plotOutput("Barplot_hs")), column(1, plotlyOutput("allopie_hs"))),
-                 #plotOutput("Catmap"),
                  br(),
                  br(),
                  fluidRow(column(8, plotOutput("Catbar")), column(4, plotOutput("Wgtplots"))),
-                 #fluidRow(column(7, plotOutput("Lenden")))
                )
              )
     )
-    
-    # fluidRow(
-    #   column(1, br()),
-    #   column(4, br(), plotlyOutput("IndPlot")),
-    #   #column(1, div(style = "height:100px")),
-    #   column(5, br(), plotOutput("Alloplot"), offset = 2, style='padding-bottom:200px')
-    # ),
-        
 )
 
 
