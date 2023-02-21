@@ -1,0 +1,13 @@
+name: WPEA-data-visuals
+title: WPEA-data-visuals
+username:
+account: smspc-apps
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8376439
+bundleId: 6871959
+url: https://smspc-apps.shinyapps.io/WPEA-data-visuals/
+when: 1677020145.04379
+lastSyncTime: 1677020145.04379
+asMultiple: FALSE
+asStatic: FALSE

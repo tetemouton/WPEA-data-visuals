@@ -1,13 +1,9 @@
 library(shiny)
 library(ggplot2)
-library(plotly)
 library(shinyWidgets)
 library(shinydashboard)
-library(data.table)
 library(sf)
 library(maps)
-library(scatterpie)
-library(lubridate)
 library(grid)
 library(gridExtra)
 library(ggthemes)
@@ -22,12 +18,9 @@ library(rnaturalearthdata)
   
   world <- ne_countries(scale = "medium", returnclass = "sf")
 
-  dat_pth <- "C:/GitRep/WPEA-data-visuals/Data/"
-
-
-  load(paste0(dat_pth, "All_a-best_data.RData"), verbose = TRUE)
-  load(paste0(dat_pth, "All_lf-master-wpea_data.RData"), verbose = TRUE)
-  load(paste0(dat_pth, "All_wf-master-wpea_data.RData"), verbose = TRUE)
+  load("./Data/All_a-best_data.RData")
+  load("./Data/All_lf-master-wpea_data.RData")
+  load("./Data/All_wf-master-wpea_data.RData")
 
   dat %<>% mutate(lat = as.numeric(str_sub(lat_short, 1, -2)), lon = as.numeric(str_sub(lon_short, 1, -2)),
                   lat_txt = str_sub(lat_short, -1, -1), lon_txt = str_sub(lon_short, -1, -1),
@@ -37,17 +30,26 @@ library(rnaturalearthdata)
   dat_w <- dat %>% filter(ocean_id %in% c("WN","WS"), flag_id %in% c("ID","PH","VN")) %>% mutate(Fleet = paste(flag_id, fleet_id)) %>%
                    select(Gear = gr_id, flag_id, fleet_id, Fleet, yy, lat, lon, ocean_id, days, sets, hhooks, stdeff, Skipjack = skj_c, Yellowfin = yft_c, Bigeye = bet_c)
 
+  
+  dat_lf %<>% mutate(FLEET_ID = ifelse(is.na(FLEET_ID), "", FLEET_ID))
+  dat_wf %<>% mutate(FLEET_ID = ifelse(is.na(FLEET_ID), "", FLEET_ID))
+  
+  
+  xlim_yrs <- c(min(dat_w$yy), max(dat_w$yy))
+  
   dat_l <- dat_w %>% pivot_longer(c(Skipjack,Yellowfin,Bigeye), names_to = "Species", values_to = "Catch")
 
   fstyr <- 1950
   lstyr <- 2021
   
-  eez <- st_read("C:/MFCL_Plots/SKJ2022/EEZ_Shape_Files/World_EEZ_v10_2018_0_360.shp")
+  eez <- st_read("./Data/EEZ_Shape_Files/World_EEZ_v10_2018_0_360.shp")
   
-  assreg <- read.csv("C:/GitRep/WPEA-data-visuals/Data/reg_borders.csv", header=TRUE)
+  assreg <- read.csv("./Data/reg_borders.csv", header=TRUE)
   assreg5 <- filter(assreg, ID == 5)
 
-  collist <- c("red2","royalblue2","darkolivegreen3","darkorchid2","goldenrod1","grey30","lightsalmon1","wheat4","black","brown","green","orange")
+  collist <- c("S" = "red2", "L" = "royalblue2", "G" = "darkolivegreen3", "H" = "darkorchid2", "K" = "goldenrod1", "P" = "grey30",  "R" = "lightsalmon1",  "O" = "wheat4",
+               "Skipjack" = "black", "Yellowfin" = "brown", "Bigeye" = "green",
+               "ID " = "orange", "ID ID" = "darkorchid1", "PH " = "skyblue1", "PH DW" = "yellow", "PH PH" = "forestgreen", "VN " = "pink")
 
   
 #____________________________________________________________________________________________________________
@@ -74,14 +76,11 @@ ui <- fluidPage(
              
              sidebarLayout(
                sidebarPanel(width = 2,
-                            selectInput("response", h5(tags$b("Species/gear to investigate:")),
-                                                        c("Purse Seine" = "purse",
-                                                          "Longline" = "longL"), width = "250px"),
                             
-                            checkboxGroupInput("grs", "Fishing methods to display:",
+                            checkboxGroupInput("grs", "Fishing gears to display:",
                                                c("Purse Seine (S)" = "S", "Longline (L)" = "L", "Pole and Line (P)" = "P", "Gillnet (G)" = "G", "Handline (H)" = "H",
                                                  "Knet??? (K)" = "K", "Ringnet (R)" = "R", "Other gears (O)" = "O"),
-                                               selected = c("S")),
+                                               selected = c("S","L")),
                             
                             checkboxGroupInput("species", "Choose your species:",
                                                c("Skipjack" = "Skipjack", "Yellowfin" = "Yellowfin", "Bigeye" = "Bigeye"),
@@ -123,7 +122,6 @@ ui <- fluidPage(
 
 server <- function(input, output) {
     
-  
   plot_dat <- reactive({
     
     # Filter to leave only checked gears
@@ -306,10 +304,6 @@ server <- function(input, output) {
   })
   
   
-  
-  
-  
-  
   output$Catmap <- renderPlot({
     
     dat_pl <- plot_dat()
@@ -333,7 +327,7 @@ server <- function(input, output) {
       pl <- ggplot() +
                    #geom_sf(data = eez, color = alpha("black", 0.9), fill = "aliceblue") +
                    geom_sf(data = world, color = "black", fill = "grey80") + ggthemes::theme_few() +
-                   scale_fill_manual(values = collist) +
+                   scale_colour_manual(values = collist[names(collist) %in% unique(dat_pl_map$Gear)]) +
                    coord_sf(xlim = c(100, map_expnse[1]), ylim = c(-20, map_expnse[2]), expand = FALSE) +
                    geom_polygon(data = assreg, aes(x = lon, y = lat, group = ID, fill = ID), colour = "black", fill = alpha("steelblue", 0.6), alpha = 0.1) +
                    geom_polygon(data = assreg5, aes(x = lon, y = lat, group = ID, fill = ID), colour = "black", fill = alpha("purple", 0.7), alpha = 0.1)
@@ -372,9 +366,9 @@ server <- function(input, output) {
                                    xmax = input$sliderrng[2] + 0.5,
                                    ymin = -Inf, ymax = Inf), fill = alpha("steelblue", 0.3)) + ggtitle("Catch history") +
                      geom_bar(data = dat_pl_bar, aes(x = yy, y = Catch/1000, fill = Group), alpha = 0.6,  stat = "identity", width = 0.8) + theme_minimal() +
-                     scale_fill_manual(values = collist) +
+                     scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) + xlim(xlim_yrs) +
                      theme(panel.border = element_blank(), axis.text = element_text(size = 14), axis.title = element_text(size = 14),
-                           plot.title = element_text(vjust = - 7, size = 18, colour = alpha("grey30", 0.7), face = "bold", family = "Comic Sans MS"))
+                           plot.title = element_text(vjust = - 7, size = 18, colour = alpha("grey30", 0.7), face = "bold"))
     
     pl
     
@@ -396,9 +390,9 @@ server <- function(input, output) {
                     ymin = -Inf, ymax = Inf), fill = alpha("steelblue", 0.3)) + ggtitle("Length frequencies") +
       geom_bar(data = dat_pl_bar, aes(x = yy, y = N/1000, fill = Group), alpha = 0.6,  stat = "identity", width = 0.8) + theme_minimal() +
       #guides(fill = guide_legend(nrow = 1, byrow = TRUE)) +
-      scale_fill_manual(values = collist) +
+      scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) + xlim(xlim_yrs) +
       theme(panel.border = element_blank(), axis.text = element_text(size = 13), axis.title = element_text(size = 14),
-            plot.title = element_text(vjust = - 8, size = 14, colour = alpha("grey30", 0.7), face = "bold", family = "Comic Sans MS"))
+            plot.title = element_text(vjust = - 8, size = 14, colour = alpha("grey30", 0.7), face = "bold"))
     
     
     dat_pl <- plot_len_dat() %>% ungroup()
@@ -411,10 +405,10 @@ server <- function(input, output) {
     # %>% filter(between(yy, input$sliderrng[1], input$sliderrng[2])) 
     
     pl2 <- ggplot() + xlab("Length (cm)") + ylab("Density") +
-      #geom_density(data = dat_pl_den, aes(x = LEN, fill = Group), alpha = 0.6) + theme_minimal() +
+      #geom_density(data = dat_pl_den, aes(x = LEN, y = N, fill = Group), alpha = 0.6) + theme_minimal() +
       geom_bar(data = dat_pl_den, aes(x = LEN, y = N, fill = Group), stat = "identity", alpha = 0.4, width = 1) + theme_minimal() +
       #guides(fill = guide_legend(nrow = 1, byrow = TRUE)) +
-      scale_fill_manual(values = collist) +
+      scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) +
       theme(panel.border = element_blank()) #, legend.position = c(0.8, 0.7))
     
     
@@ -437,9 +431,9 @@ server <- function(input, output) {
                     ymin = -Inf, ymax = Inf), fill = alpha("steelblue", 0.3)) + ggtitle("Weight frequencies") +
       geom_bar(data = dat_pl_bar, aes(x = yy, y = N/1000, fill = Group), alpha = 0.6,  stat = "identity", width = 0.8) + theme_minimal() +
       #guides(fill = guide_legend(nrow = 1, byrow = TRUE)) +
-      scale_fill_manual(values = collist) +
+      scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) + xlim(xlim_yrs) +
       theme(panel.border = element_blank(), axis.text = element_text(size = 13), axis.title = element_text(size = 14),
-            plot.title = element_text(vjust = - 8, size = 14, colour = alpha("grey30", 0.7), face = "bold", family = "Comic Sans MS"))
+            plot.title = element_text(vjust = - 8, size = 14, colour = alpha("grey30", 0.7), face = "bold"))
     
     
     dat_pl <- plot_wgt_dat() %>% ungroup()
@@ -455,7 +449,7 @@ server <- function(input, output) {
       #geom_density(data = dat_pl_den, aes(x = LEN, fill = Group), alpha = 0.6) + theme_minimal() +
       geom_bar(data = dat_pl_den, aes(x = WT, y = N, fill = Group), stat = "identity", alpha = 0.4, width = 1) + theme_minimal() +
       #guides(fill = guide_legend(nrow = 1, byrow = TRUE)) +
-      scale_fill_manual(values = collist) +
+      scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) +
       theme(panel.border = element_blank()) #, legend.position = c(0.8, 0.7))
     
     
