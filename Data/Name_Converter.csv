@@ -1,0 +1,69 @@
+All,Mod1,Mod2,Full,Partgrp,Grp,Flggrp
+AS,AS,AS,American Samoa,American Samoa,US Zones,US
+AU,AU,AU,Australia,Australia,FFA,FFA
+BZ,BZ,BZ,Belize,Other,Other,Other
+CA,CA,CA,Canada,Other,Other,Other
+CK,CK,CK,Cook Islands,Cook Islands,FFA,FFA
+CN,CN,CN,China,Other,Other,Other
+EC,EC,EC,Ecuador,Other,Other,Other
+EP,EP,EP,Eastern Pacific,Other,Other,Other
+EU,EU,EU,EU,EU,Other,EU
+ES,EU,EU,EU,EU,Other,Other
+FJ,FJ,FJ,Fiji,Fiji,FFA,FFA
+FM,FM,FM,FSM,FSM,FFA,FFA
+GL,KI,KI,Kiribati,Kiribati,FFA,FFA
+GU,GU,US,Guam,US Zones,US Zones,US
+H4,H4,HS,HS4,High Seas,High Seas,Other
+H5,H5,HS,HS5,High Seas,High Seas,Other
+HB,HB,US,Howland Baker,US Zones,US Zones,US
+HW,HW,US,Hawaii,US Zones,US Zones,US
+I0,I0,I0,Misc International Waters,Misc International Waters,Misc International Waters,Other
+I1,I1,HS,Int1,High Seas,High Seas,Other
+I2,I2,HS,Int2,High Seas,High Seas,Other
+I3,I3,HS,Int3,High Seas,High Seas,Other
+I4,I4,HS,Int4,High Seas,High Seas,Other
+I5,I5,HS,Int5,High Seas,High Seas,Other
+I6,I6,HS,Int6,High Seas,High Seas,Other
+I7,I7,HS,Int7,High Seas,High Seas,Other
+I8,I8,HS,Int8,High Seas,High Seas,Other
+I9,I9,HS,Int9,High Seas,High Seas,Other
+ID,ID,HS,Indonesia,Indonesia,Other,Other
+IW,IW,IW,Misc International Waters,Misc International Waters,Misc International Waters,Other
+JO,JT,US,Johnston,US Zones,US Zones,US
+JP,JP,JP,Japan,Other,Other,Other
+JT,JT,US,Johnston,US Zones,US Zones,US
+JV,JV,US,Jarvis,US Zones,US Zones,US
+KI,KI,KI,Kiribati,Kiribati,FFA,FFA
+LN,KI,KI,Kiribati,Kiribati,FFA,FFA
+KR,KR,KR,Korea,Korea,Other,Other
+MA,NC,MA,New Caledonia,New Caledonia,French,French
+MH,MH,MH,Marshall Islands,Marshall Islands,FFA,FFA
+MN,MN,MN,Not sure,Not sure,Not sure,Other
+MP,MP,MP,Northern Mariana Islands,US Zones,US Zones,US
+NC,NC,NC,New Caledonia,New Caledonia,French,French
+NF,AU,AU,Australia,Australia,FFA,FFA
+NR,NR,NR,Nauru,Nauru,FFA,FFA
+NU,NU,NU,Niue,Niue,FFA,FFA
+NZ,NZ,NZ,New Zealand,New Zealand,FFA,FFA
+PF,PF,PF,French Polynesia,French Polynesia,French,French
+PG,PG,PG,PNG,PNG,FFA,FFA
+PH,PH,PH,Philippines,Philippines,Other,Other
+PN,PN,PN,Pitcairn Islands,Pitcairn Islands,Other,Other
+PT,EU,EU,EU,EU,Other,Other
+PW,PW,PW,Palau,Palau,FFA,FFA
+PX,KI,KI,Kiribati,Kiribati,FFA,FFA
+PY,PY,US,Palmyra,US Zones,US Zones,US
+SB,SB,SB,Solomon Islands,Solomon Islands,FFA,FFA
+SN,SN,SN,Senegal,Senegal,Other,Other
+SU,EU,EU,Russia,EU,Other,Other
+SV,SV,SV,El Salvador,El Salvador,Other,Other
+TK,TK,TK,Tokelau,Tokelau,FFA,FFA
+TO,TO,TO,Tonga,Tonga,FFA,FFA
+TV,TV,TV,Tuvalu,Tuvalu,FFA,FFA
+TW,TW,TW,Taiwan,Taiwan,Other,Other
+US,US,US,US,US Zones,US Zones,US
+VN,VN,VN,Vietnam,Vietnam,Other,Other
+VU,VU,VU,Vanuatu,Vanuatu,FFA,FFA
+WF,WF,WF,Wallis Futuna,Wallis Futuna,French,French
+WK,WK,US,Wake Island,US Zones,US Zones,US
+WS,WS,WS,Samoa,Samoa,FFA,FFA
