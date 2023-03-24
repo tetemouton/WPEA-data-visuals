@@ -49,7 +49,8 @@ library(rnaturalearthdata)
 
   collist <- c("S" = "red2", "L" = "royalblue2", "G" = "darkolivegreen3", "H" = "darkorchid2", "K" = "goldenrod1", "P" = "grey30",  "R" = "lightsalmon1",  "O" = "wheat4",
                "Skipjack" = "black", "Yellowfin" = "brown", "Bigeye" = "green",
-               "ID " = "orange", "ID ID" = "darkorchid1", "PH " = "skyblue1", "PH DW" = "yellow", "PH PH" = "forestgreen", "VN " = "pink")
+               "ID " = "orange", "ID ID" = "darkorchid1", "PH " = "skyblue1", "PH DW" = "yellow", "PH PH" = "forestgreen", "VN " = "pink",
+               "ID   " = "orange", "ID DW" = "firebrick",  "PH   " = "skyblue1",  "VN   " = "pink")
 
   
 #____________________________________________________________________________________________________________
