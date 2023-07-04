@@ -1,3 +1,5 @@
+# Pubished for now on: 
+
 library(shiny)
 library(ggplot2)
 library(shinyWidgets)
@@ -15,6 +17,9 @@ library(rnaturalearthdata)
   theme_set(theme_bw())
   
   sf_use_s2(FALSE)
+  
+  fstyr <- 1950
+  lstyr <- 2021
   
   world <- ne_countries(scale = "medium", returnclass = "sf")
 
@@ -35,12 +40,11 @@ library(rnaturalearthdata)
   dat_wf %<>% mutate(FLEET_ID = ifelse(is.na(FLEET_ID), "", FLEET_ID))
   
   
-  xlim_yrs <- c(min(dat_w$yy), max(dat_w$yy))
+  xlim_yrs <- c(min(dat_w$yy), lstyr)
   
   dat_l <- dat_w %>% pivot_longer(c(Skipjack,Yellowfin,Bigeye), names_to = "Species", values_to = "Catch")
 
-  fstyr <- 1950
-  lstyr <- 2021
+
   
   eez <- st_read("./Data/EEZ_Shape_Files/World_EEZ_v10_2018_0_360.shp")
   
@@ -79,8 +83,8 @@ ui <- fluidPage(
                sidebarPanel(width = 2,
                             
                             checkboxGroupInput("grs", "Fishing gears to display:",
-                                               c("Purse Seine (S)" = "S", "Longline (L)" = "L", "Pole and Line (P)" = "P", "Gillnet (G)" = "G", "Handline (H)" = "H",
-                                                 "Knet??? (K)" = "K", "Ringnet (R)" = "R", "Other gears (O)" = "O"),
+                                               c("Purse Seine (S)" = "S", "Longline (L)" = "L", "Pole and Line (P)" = "P", "Gillnet (G)" = "G", "Handline lge fish (H)" = "H",
+                                                 "Handline sml fish (K)" = "K", "Ringnet (R)" = "R", "Other gears (O)" = "O"),
                                                selected = c("S","L")),
                             
                             checkboxGroupInput("species", "Choose your species:",
@@ -365,9 +369,9 @@ server <- function(input, output) {
     pl <- ggplot() + xlab("") + ylab("Catch (1,000's mt)") +
                      geom_rect(aes(xmin = input$sliderrng[1] - 0.5,
                                    xmax = input$sliderrng[2] + 0.5,
-                                   ymin = -Inf, ymax = Inf), fill = alpha("steelblue", 0.3)) + ggtitle("Catch history") +
+                                   ymin = -Inf, ymax = Inf), fill = alpha("green", 0.1)) + ggtitle("Catch history") +
                      geom_bar(data = dat_pl_bar, aes(x = yy, y = Catch/1000, fill = Group), alpha = 0.6,  stat = "identity", width = 0.8) + theme_minimal() +
-                     scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) + xlim(xlim_yrs) +
+                     scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) + xlim(c(1960, lstyr + 1)) +
                      theme(panel.border = element_blank(), axis.text = element_text(size = 14), axis.title = element_text(size = 14),
                            plot.title = element_text(vjust = - 7, size = 18, colour = alpha("grey30", 0.7), face = "bold"))
     
@@ -388,10 +392,10 @@ server <- function(input, output) {
     pl1 <- ggplot() + xlab("") + ylab("No. lengths (1,000's)") +
       geom_rect(aes(xmin = input$sliderrng[1] - 0.5,
                     xmax = input$sliderrng[2] + 0.5,
-                    ymin = -Inf, ymax = Inf), fill = alpha("steelblue", 0.3)) + ggtitle("Length frequencies") +
+                    ymin = -Inf, ymax = Inf), fill = alpha("green", 0.1)) + ggtitle("Length frequencies") +
       geom_bar(data = dat_pl_bar, aes(x = yy, y = N/1000, fill = Group), alpha = 0.6,  stat = "identity", width = 0.8) + theme_minimal() +
       #guides(fill = guide_legend(nrow = 1, byrow = TRUE)) +
-      scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) + xlim(xlim_yrs) +
+      scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) + xlim(c(1960, lstyr + 1)) +
       theme(panel.border = element_blank(), axis.text = element_text(size = 13), axis.title = element_text(size = 14),
             plot.title = element_text(vjust = - 8, size = 14, colour = alpha("grey30", 0.7), face = "bold"))
     
@@ -429,10 +433,10 @@ server <- function(input, output) {
     pl1 <- ggplot() + xlab("") + ylab("No. weights (1,000's)") +
       geom_rect(aes(xmin = input$sliderrng[1] - 0.5,
                     xmax = input$sliderrng[2] + 0.5,
-                    ymin = -Inf, ymax = Inf), fill = alpha("steelblue", 0.3)) + ggtitle("Weight frequencies") +
+                    ymin = -Inf, ymax = Inf), fill = alpha("green", 0.1)) + ggtitle("Weight frequencies") +
       geom_bar(data = dat_pl_bar, aes(x = yy, y = N/1000, fill = Group), alpha = 0.6,  stat = "identity", width = 0.8) + theme_minimal() +
       #guides(fill = guide_legend(nrow = 1, byrow = TRUE)) +
-      scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) + xlim(xlim_yrs) +
+      scale_fill_manual(values = collist[names(collist) %in% unique(dat_pl_bar$Group)]) + xlim(c(1960, lstyr + 1)) +
       theme(panel.border = element_blank(), axis.text = element_text(size = 13), axis.title = element_text(size = 14),
             plot.title = element_text(vjust = - 8, size = 14, colour = alpha("grey30", 0.7), face = "bold"))
     
