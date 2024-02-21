@@ -19,7 +19,7 @@ library(rnaturalearthdata)
   sf_use_s2(FALSE)
   
   fstyr <- 1950
-  lstyr <- 2021
+  lstyr <- 2022
   
   world <- ne_countries(scale = "medium", returnclass = "sf")
 

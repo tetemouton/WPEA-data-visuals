@@ -5,9 +5,7 @@ account: smspc-apps
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 8376439
-bundleId: 7016925
+bundleId: 8279287
 url: https://smspc-apps.shinyapps.io/WPEA-data-visuals/
-when: 1679980597.2629
-lastSyncTime: 1679980597.2629
 asMultiple: FALSE
 asStatic: FALSE
